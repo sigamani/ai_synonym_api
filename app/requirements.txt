@@ -1,7 +1,0 @@
-fastapi
-uvicorn
-openai
-numpy
-scikit-learn
-pytest
-pytest-asyncio
