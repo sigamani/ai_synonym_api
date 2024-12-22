@@ -13,12 +13,28 @@ class SynonymService:
     async def generate_synonyms(self, word: str) -> list[str]:
         """Generates synonyms for a given word."""
         response = client.chat.completions.create(
-            messages=[{"role": "user", "content": f"Please provide a list of at least 10 synonyms for the word: '{word}'. Respond only with the required synonyms, separated by: ###."}],  # Corrected f-string formatting
+            messages=[
+                {
+                    "role": "user",
+                    "content": (
+                        f"Please provide a list of at least 10 synonyms for "
+                        f"the word: '{word}'. Respond only with the required "
+                        f"synonyms, separated by: ###."
+                    ),
+                }
+            ],
             model="gpt-4",  # or gpt-3.5-turbo
         )
-        synonyms = response.choices[0].message.content.strip().split("###")
+        synonyms_text = response.choices[0].message.content.strip()
+        synonyms = synonyms_text.split("###")
         return [s.strip() for s in synonyms if s.strip()]
 
-    async def check_word_exists(self, word: str) -> bool:
-        """Checks if a word exists (replace with your logic)."""
-        return True
+
+    async def is_valid_word(self, word: str) -> bool:
+        """
+        Checks if the input word is valid.
+
+        This is a placeholder.  Replace with your actual validation logic.
+        """
+        # Placeholder implementation - replace with a real check
+        return word.isalpha()
