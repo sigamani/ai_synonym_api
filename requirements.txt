@@ -4,7 +4,6 @@ openai
 numpy
 langchain
 langchain-community
-faiss
 scikit-learn
 pytest
 pydantic
