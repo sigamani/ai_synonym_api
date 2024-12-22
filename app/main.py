@@ -12,47 +12,29 @@ class SynonymService:
     """Service for generating synonyms using OpenAI."""
 
     async def generate_synonyms(self, word: str) -> list[str]:
-        """Generates a list of synonyms for a given word using OpenAI's GPT model.
-
-        Args:
-            word: The input word for which to generate synonyms.
-
-        Returns:
-            A list of synonyms.
-        """
+        """Generates synonyms for a given word."""
         response = client.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": (
-                        f"Please provide a list of at least 10 synonyms for the word: '{word}'."
-                        f"Respond only with the required synonyms, separated by: ###. "
-                    ),
-                }
-            ],
+            messages=[{"role": "user", "content": f"Please provide a list of at least 10 synonyms for the word: '{word}'. Respond only with the required synonyms, separated by: ###."}],
             model="gpt-4",  # or gpt-3.5-turbo
         )
         synonyms = response.choices[0].message.content.strip().split("###")
         return [s.strip() for s in synonyms if s.strip()]
 
-    async def get_example(self): # Added an extra method to address R0903
-        """ Placeholder for a real method"""
-        pass
+    async def check_word_exists(self, word: str) -> bool:  # Example placeholder method
+        """Checks if a word exists (replace with your logic)."""
+        return True
 
 
 class EmbeddingService:
     """Service for calculating embeddings and similarity."""
 
-    async def sort_by_similarity(self, word: str, synonyms: list):
-        """Sorts synonyms by their similarity to the input word using embeddings.
+    async def get_embeddings(self, words: list[str]) -> list[list[float]]:
+        """Gets embeddings for a list of words."""
+        response = client.embeddings.create(model="text-embedding-ada-002", input=words)
+        return [item.embedding for item in response.data]
 
-        Args:
-            word: The input word.
-            synonyms: A list of synonyms.
-
-        Returns:
-            A list of synonyms sorted by similarity score.
-        """
+    async def sort_by_similarity(self, word: str, synonyms: list[str]) -> list[dict]:
+        """Sorts synonyms by similarity to the input word."""
         embeddings = await self.get_embeddings([word] + synonyms)
         input_embedding = embeddings[0]
         synonym_embeddings = embeddings[1:]
@@ -60,30 +42,13 @@ class EmbeddingService:
         similarities = cosine_similarity([input_embedding], synonym_embeddings).flatten()
 
         return sorted(
-            [
-                {"word": synonym, "similarity_score": float(score)}
-                for synonym, score in zip(synonyms, similarities)
-            ],
+            [{"word": synonym, "similarity_score": float(score)} for synonym, score in zip(synonyms, similarities)],
             key=lambda x: x["similarity_score"],
             reverse=True,
         )
 
-    async def get_embeddings(self, words: list):
-        """Gets embeddings for a list of words using OpenAI's embedding model.
-        Args:
-            words: The list of words.
-        Returns:
-            A list of embeddings.
 
-        """
-        response = client.embeddings.create(
-            model="text-embedding-ada-002", input=words
-        )
-        return [item.embedding for item in response.data]
-
-
-app = FastAPI(title="AI Synonym API", description="Generates and sorts synonyms using OpenAI")  # Add title and description
-
+app = FastAPI(title="AI Synonym API", description="Generates and sorts synonyms using OpenAI")
 
 synonym_service = SynonymService()
 embedding_service = EmbeddingService()
@@ -97,11 +62,11 @@ class WordRequest(BaseModel):
 class SynonymResponse(BaseModel):
     """Response model for the /synonyms endpoint."""
     input_word: str
-    synonyms: list
+    synonyms: list[dict]
 
 
 @app.post("/synonyms", response_model=SynonymResponse)
-async def get_synonyms(request: WordRequest):
+async def get_synonyms(request: WordRequest) -> SynonymResponse:
     """Endpoint for retrieving synonyms for a given word."""
     input_word = request.word.strip()
     if not input_word:

@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="ai_synonym_api" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="ai_synonym_api" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="popp2" project-jdk-type="Python SDK" />
 </project>

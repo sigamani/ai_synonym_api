@@ -1,15 +1,28 @@
+# services/embedding_service.py
+"""Module containing the EmbeddingService class."""
+
+import os
+from openai import OpenAI
 from sklearn.metrics.pairwise import cosine_similarity
 
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-class EmbeddingService:
-    async def sort_by_similarity(self, word: str, synonyms: list):
+class EmbeddingService:  # Corrected indentation
+    """Service for calculating embeddings and similarity."""
+
+    async def get_embeddings(self, words: list[str]) -> list[list[float]]:
+        """Gets embeddings for a list of words."""
+        response = client.embeddings.create(model="text-embedding-ada-002", input=words)
+        return [item.embedding for item in response.data]
+
+    async def sort_by_similarity(self, word: str, synonyms: list[str]) -> list[dict]:
+        """Sorts synonyms by similarity to the input word."""
+
         embeddings = await self.get_embeddings([word] + synonyms)
         input_embedding = embeddings[0]
         synonym_embeddings = embeddings[1:]
 
-        similarities = cosine_similarity(
-            [input_embedding], synonym_embeddings
-        ).flatten()
+        similarities = cosine_similarity([input_embedding], synonym_embeddings).flatten()
 
         return sorted(
             [{"word": synonym, "similarity_score": float(score)} for synonym, score in zip(synonyms, similarities)],
@@ -17,10 +30,3 @@ class EmbeddingService:
             reverse=True
         )
 
-    async def get_embeddings(self, words):
-        response = client.embeddings.create(
-            model="text-embedding-3-small",
-            input=words
-        )
-        embeddings = [item.embedding for item in response.data]
-        return embeddings
