@@ -1,8 +1,9 @@
 import pytest
-
 from services.embedding_service import EmbeddingService
 from services.synonym_service import SynonymService
 
+
+# ... your test functions
 
 @pytest.mark.asyncio
 async def test_generate_synonyms():

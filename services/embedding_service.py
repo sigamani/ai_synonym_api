@@ -1,13 +1,10 @@
-# services/embedding_service.py
-"""Module containing the EmbeddingService class."""
-
 import os
 from openai import OpenAI
 from sklearn.metrics.pairwise import cosine_similarity
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-class EmbeddingService:  # Corrected indentation
+class EmbeddingService:
     """Service for calculating embeddings and similarity."""
 
     async def get_embeddings(self, words: list[str]) -> list[list[float]]:
