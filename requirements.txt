@@ -2,6 +2,6 @@ fastapi
 uvicorn
 openai
 numpy
-sklearn
+scikit-learn
 pytest
 pytest-asyncio
