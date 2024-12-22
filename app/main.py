@@ -24,7 +24,7 @@ class SynonymService:
             model="gpt-4",  # or gpt-3.5-turbo
         )
         synonyms = response.choices[0].message.content.strip().split("###")
-        return [s.strip() for s in synonyms if s.strip()] # Remove empty strings
+        return [s.strip() for s in synonyms if s.strip()]  # Remove empty strings
 
 
 class EmbeddingService:
@@ -33,7 +33,9 @@ class EmbeddingService:
         input_embedding = embeddings[0]
         synonym_embeddings = embeddings[1:]
 
-        similarities = cosine_similarity([input_embedding], synonym_embeddings).flatten()
+        similarities = cosine_similarity(
+            [input_embedding], synonym_embeddings
+        ).flatten()
 
         return sorted(
             [
