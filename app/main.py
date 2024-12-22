@@ -1,17 +1,12 @@
 import os
 
 from fastapi import FastAPI, HTTPException
-###
 from openai import OpenAI
 from pydantic import BaseModel
-from transformers import pipeline
+from sklearn.metrics.pairwise import cosine_similarity
 
-# from services.synonym_service import SynonymService
-# from services.embedding_service import EmbeddingService
 
-client = OpenAI(
-    api_key=os.environ.get("OPENAI_API_KEY"),
-)
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
 class SynonymService:
@@ -20,20 +15,16 @@ class SynonymService:
             messages=[
                 {
                     "role": "user",
-                    "content": f"Please provide a list of at least 10 synonyms for the word: '{word}'."
-                               f"Respond only with the required synonyms, separated by: ###. "
-
+                    "content": (
+                        f"Please provide a list of at least 10 synonyms for the word: '{word}'."
+                        f"Respond only with the required synonyms, separated by: ###. "
+                    ),
                 }
             ],
-            model="gpt-4o",
+            model="gpt-4",  # or gpt-3.5-turbo
         )
         synonyms = response.choices[0].message.content.strip().split("###")
-        return synonyms
-
-
-###
-
-from sklearn.metrics.pairwise import cosine_similarity
+        return [s.strip() for s in synonyms if s.strip()] # Remove empty strings
 
 
 class EmbeddingService:
@@ -42,31 +33,27 @@ class EmbeddingService:
         input_embedding = embeddings[0]
         synonym_embeddings = embeddings[1:]
 
-        similarities = cosine_similarity(
-            [input_embedding], synonym_embeddings
-        ).flatten()
+        similarities = cosine_similarity([input_embedding], synonym_embeddings).flatten()
 
         return sorted(
-            [{"word": synonym, "similarity_score": float(score)} for synonym, score in zip(synonyms, similarities)],
+            [
+                {"word": synonym, "similarity_score": float(score)}
+                for synonym, score in zip(synonyms, similarities)
+            ],
             key=lambda x: x["similarity_score"],
-            reverse=True
+            reverse=True,
         )
 
-    async def get_embeddings(self, words):
+    async def get_embeddings(self, words: list):
         response = client.embeddings.create(
-            model="text-embedding-3-small",
-            input=words
+            model="text-embedding-ada-002", input=words  # Updated to recommended model
         )
-        embeddings = [item.embedding for item in response.data]
-        return embeddings
+        return [item.embedding for item in response.data]
 
-
-###
 
 app = FastAPI()
 
 synonym_service = SynonymService()
-pipe = pipeline("text-classification", model="vectara/hallucination_evaluation_model")
 embedding_service = EmbeddingService()
 
 

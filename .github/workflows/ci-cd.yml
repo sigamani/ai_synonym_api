@@ -23,12 +23,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pylint black
+
+      - name: Run Pylint
+        run: |
+          pylint app services  # Replace with your actual source code directories
+
+      - name: Run Black (check formatting)
+        run: |
+          black --check app services  # Replace with your actual source code directories
 
       - name: Start the application
         run: |
           uvicorn main:app --host 0.0.0.0 --port 8000 &
           sleep 5
-
       - name: Test synonym endpoint
         run: |
           response=$(curl -X 'POST' \
