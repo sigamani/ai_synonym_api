@@ -1,14 +1,17 @@
 # AI Synonym API
 
 ## Description
+
 A scalable API to fetch synonyms for a given word using OpenAI's language models and embedding services.
 
 ## Features
+
 - Generate a list of synonyms for an input word.
 - Sort synonyms by semantic similarity.
 - Designed using FastAPI for efficiency.
 
 ## Setup Instructions
+
 1. Clone the repository:
    ```bash
    git clone <repo-url>
@@ -33,12 +36,15 @@ A scalable API to fetch synonyms for a given word using OpenAI's language models
 5. Access API documentation at `http://127.0.0.1:8000/docs`.
 
 ## Testing
+
 Run tests with Pytest:
+
 ```bash
 pytest --cov=app tests/
 ```
 
 ## Docker Deployment
+
 1. Build and run the Docker container:
    ```bash
    docker build -t ai-synonym-api .
@@ -48,6 +54,7 @@ pytest --cov=app tests/
 2. Access the application at `http://127.0.0.1:8000`.
 
 ## AWS Deployment
+
 1. Use Terraform to set up CI/CD pipeline and deployment:
    ```bash
    cd terraform

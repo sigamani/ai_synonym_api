@@ -1,15 +1,18 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-#from services.synonym_service import SynonymService
-#from services.embedding_service import EmbeddingService
+import os
 
+from fastapi import FastAPI, HTTPException
 ###
 from openai import OpenAI
-import os
+from pydantic import BaseModel
+from transformers import pipeline
+
+# from services.synonym_service import SynonymService
+# from services.embedding_service import EmbeddingService
 
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
+
 
 class SynonymService:
     async def generate_synonyms(self, word: str):
@@ -20,17 +23,18 @@ class SynonymService:
                     "content": f"Please provide a list of at least 10 synonyms for the word: '{word}'."
                                f"Respond only with the required synonyms, separated by: ###. "
 
-
                 }
             ],
             model="gpt-4o",
         )
         synonyms = response.choices[0].message.content.strip().split("###")
         return synonyms
+
+
 ###
 
-import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+
 
 class EmbeddingService:
     async def sort_by_similarity(self, word: str, synonyms: list):
@@ -56,15 +60,19 @@ class EmbeddingService:
         embeddings = [item.embedding for item in response.data]
         return embeddings
 
+
 ###
 
 app = FastAPI()
 
 synonym_service = SynonymService()
+pipe = pipeline("text-classification", model="vectara/hallucination_evaluation_model")
 embedding_service = EmbeddingService()
+
 
 class WordRequest(BaseModel):
     word: str
+
 
 class SynonymResponse(BaseModel):
     input_word: str

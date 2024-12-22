@@ -1,6 +1,5 @@
-import openai
-import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+
 
 class EmbeddingService:
     async def sort_by_similarity(self, word: str, synonyms: list):
@@ -19,8 +18,9 @@ class EmbeddingService:
         )
 
     async def get_embeddings(self, words):
-        response = openai.Embedding.create(
-            engine="text-embedding-ada-002",
+        response = client.embeddings.create(
+            model="text-embedding-3-small",
             input=words
         )
-        return [np.array(item["embedding"]) for item in response["data"]]
+        embeddings = [item.embedding for item in response.data]
+        return embeddings
