@@ -1,7 +1,5 @@
 numpy
-langchain
-langchain-community
-faiss
+openai
 scikit-learn
 pytest
 pydantic
