@@ -9,6 +9,7 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 class SynonymService:
     """Service for generating synonyms using OpenAI."""
+
     def __init__(self):
         print("Initializing SynonymService")
 
@@ -34,7 +35,6 @@ class SynonymService:
         synonyms_text = response.choices[0].message.content.strip()
         synonyms = synonyms_text.split("###")
         return [s.strip() for s in synonyms if s.strip()]
-
 
     async def validate_word(self, word: str) -> bool:
         """Sense check for the input word."""

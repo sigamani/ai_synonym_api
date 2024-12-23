@@ -3,12 +3,16 @@ from fastapi import FastAPI, HTTPException
 from openai import OpenAI
 from pydantic import BaseModel
 from sklearn.metrics.pairwise import cosine_similarity
-from services.embedding_service import EmbeddingService # import directly rather than defining a class with same name in main.py.
+from services.embedding_service import (
+    EmbeddingService,
+)  # import directly rather than defining a class with same name in main.py.
 from services.synonym_service import SynonymService
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-app = FastAPI(title="AI Synonym API", description="Generates and sorts synonyms using OpenAI")
+app = FastAPI(
+    title="AI Synonym API", description="Generates and sorts synonyms using OpenAI"
+)
 
 synonym_service = SynonymService()
 embedding_service = EmbeddingService()
@@ -16,6 +20,7 @@ embedding_service = EmbeddingService()
 
 class WordRequest(BaseModel):
     """Request model for the /synonyms endpoint."""
+
     word: str
 
 
