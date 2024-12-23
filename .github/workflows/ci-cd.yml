@@ -68,6 +68,8 @@ jobs:
             ]\
           }'
 
+          echo $response
+          
           if [ "$response" != "$expected_response" ]; then
             echo "Test failed."
             exit 1
