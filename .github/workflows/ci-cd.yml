@@ -33,11 +33,7 @@
 #    #    run: |
 #    #      black --check app services  # Replace with your actual source code directories
 #
-#      - name: Set OpenAI API Key
-#        uses: actions/github-script@v6
-#        with:
-#          script: |
-#            core.exportVariable('OPENAI_API_KEY', '${{ secrets.OPENAI_API_KEY }}')
+
 #      - name: Start the application
 #        run: |
 #          uvicorn app.main:app --host 0.0.0.0 --port 8000 &
@@ -107,6 +103,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Set OpenAI API Key
+      uses: actions/github-script@v6
+      with:
+        script: |
+           core.exportVariable('OPENAI_API_KEY', '${{ secrets.OPENAI_API_KEY }}')
+           
     # Step 4: Run pytest
     - name: Run tests with pytest
       run: |
