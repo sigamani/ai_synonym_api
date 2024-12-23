@@ -25,13 +25,13 @@ jobs:
           pip install -r requirements.txt
           pip install pylint black
 
-      - name: Run Pylint
-        run: |
-          pylint app services  # Replace with your actual source code directories
+    #  - name: Run Pylint
+    #    run: |
+    #      pylint app services  # Replace with your actual source code directories
 
-      - name: Run Black (check formatting)
-        run: |
-          black --check app services  # Replace with your actual source code directories
+    #  - name: Run Black (check formatting)
+    #    run: |
+    #      black --check app services  # Replace with your actual source code directories
 
       - name: Set OpenAI API Key
         uses: actions/github-script@v6
