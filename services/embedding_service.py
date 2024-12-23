@@ -1,3 +1,7 @@
+"""
+Provides embedding-related services for semantic similarity calculations.
+"""
+
 import os
 from openai import OpenAI
 from sklearn.metrics.pairwise import cosine_similarity

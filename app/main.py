@@ -1,8 +1,12 @@
+"""
+Main application entry point for the AI Synonym API.
+This module contains the FastAPI app and its routes.
+"""
+
 import os
 from fastapi import FastAPI, HTTPException
 from openai import OpenAI
 from pydantic import BaseModel
-from sklearn.metrics.pairwise import cosine_similarity
 from services.embedding_service import (
     EmbeddingService,
 )  # import directly rather than defining a class with same name in main.py.
