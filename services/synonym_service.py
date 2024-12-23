@@ -9,9 +9,15 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 class SynonymService:
     """Service for generating synonyms using OpenAI."""
+    def __init__(self):
+        print("Initializing SynonymService")
 
     async def generate_synonyms(self, word: str) -> list[str]:
         """Generates synonyms for a given word."""
+
+        if not await self.validate_word(word):
+            raise ValueError(f"Invalid word: '{word}'. Please provide a valid word.")
+
         response = client.chat.completions.create(
             messages=[
                 {
@@ -30,11 +36,12 @@ class SynonymService:
         return [s.strip() for s in synonyms if s.strip()]
 
 
-    async def is_valid_word(self, word: str) -> bool:
-        """
-        Checks if the input word is valid.
-
-        This is a placeholder.  Replace with your actual validation logic.
-        """
-        # Placeholder implementation - replace with a real check
-        return word.isalpha()
+    async def validate_word(self, word: str) -> bool:
+        """Sense check for the input word."""
+        if not word:
+            return False  # Empty strings or null inputs.
+        if not word.isalpha():
+            return False  # Non-alphabetic characters (beyond your current check).
+        if len(word) > 50:
+            return False  # Words that are excessively long.
+        return True

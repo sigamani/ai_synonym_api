@@ -8,7 +8,8 @@ class EmbeddingService:
     """Service for calculating embeddings and similarity."""
 
     async def get_embeddings(self, words: list[str]) -> list[list[float]]:
-        """Gets embeddings for a list of words."""
+        """Returns embeddings as a for a list of words.
+        """
         response = client.embeddings.create(model="text-embedding-ada-002", input=words)
         return [item.embedding for item in response.data]
 

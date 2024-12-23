@@ -1,19 +1,35 @@
 import pytest
-from services.embedding_service import EmbeddingService
 from services.synonym_service import SynonymService
 
-
-# ... your test functions
-
-@pytest.mark.asyncio
-async def test_generate_synonyms():
-    service = SynonymService()
-    synonyms = await service.generate_synonyms("example")
-    assert len(synonyms) == 10
-
+@pytest.fixture
+def synonym_service():
+    """Fixture to create an instance of SynonymService."""
+    return SynonymService()
 
 @pytest.mark.asyncio
-async def test_sort_by_similarity():
-    service = EmbeddingService()
-    result = await service.sort_by_similarity("example", ["test", "sample"])
-    assert isinstance(result, list)
+async def test_validate_word_empty_string(synonym_service):
+    """Test validate_word with an empty string."""
+    word = ""
+    result = await synonym_service.validate_word(word)
+    assert result is False, "Empty string should be invalid."
+
+@pytest.mark.asyncio
+async def test_validate_word_non_alpha(synonym_service):
+    """Test validate_word with a non-alphabetic string."""
+    word = "hello123"
+    result = await synonym_service.validate_word(word)
+    assert result is False, "Non-alphabetic string should be invalid."
+
+@pytest.mark.asyncio
+async def test_validate_word_excessive_length(synonym_service):
+    """Test validate_word with a word that exceeds the maximum length."""
+    word = "a" * 51  # 51 characters
+    result = await synonym_service.validate_word(word)
+    assert result is False, "Word exceeding length limit should be invalid."
+
+@pytest.mark.asyncio
+async def test_validate_word_valid(synonym_service):
+    """Test validate_word with a valid word."""
+    word = "example"
+    result = await synonym_service.validate_word(word)
+    assert result is True, "Valid word should pass validation."

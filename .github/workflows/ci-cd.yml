@@ -1,77 +1,113 @@
-# File: .github/workflows/ci.yml
-name: CI Workflow
+## File: .github/workflows/ci.yml
+#name: CI Workflow
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#
+#jobs:
+#  test-api:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: "3.11"
+#
+#      - name: Install dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install -r requirements.txt
+#          pip install pylint black
+#
+#    #  - name: Run Pylint
+#    #    run: |
+#    #      pylint app services  # Replace with your actual source code directories
+#
+#    #  - name: Run Black (check formatting)
+#    #    run: |
+#    #      black --check app services  # Replace with your actual source code directories
+#
+#      - name: Set OpenAI API Key
+#        uses: actions/github-script@v6
+#        with:
+#          script: |
+#            core.exportVariable('OPENAI_API_KEY', '${{ secrets.OPENAI_API_KEY }}')
+#      - name: Start the application
+#        run: |
+#          uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+#          sleep 5
+#      - name: Test synonym endpoint
+#        run: |
+#          response=$(
+#              curl -X 'POST' \
+#                'http://0.0.0.0:8000/synonyms' \
+#                -H 'accept: application/json' \
+#                -H 'Content-Type: application/json' \
+#                -d '{"word": "happy"}')
+#
+#          echo "Response: $response"
+#          expected_response='{\
+#            "input_word": "happy",\
+#            "synonyms": [\
+#             { "word": "Satisfied", "similarity_score": 0.8788865672375774 },\
+#             { "word": "Joyful", "similarity_score": 0.8756128925394083 },\
+#             { "word": "Delighted", "similarity_score": 0.8715022920174671 },\
+#             { "word": "Overjoyed", "similarity_score": 0.8705681160791444 },\
+#             { "word": "Cheerful", "similarity_score": 0.8683411862014206 },\
+#             { "word": "Pleased", "similarity_score": 0.8682256709863314 },\
+#             { "word": "Blissful", "similarity_score": 0.861055955819963 },\
+#             { "word": "Ecstatic", "similarity_score": 0.8563332438024521 },\
+#             { "word": "Thrilled", "similarity_score": 0.8561114671979105 },\
+#             { "word": "Content", "similarity_score": 0.8203253452188227 }\
+#            ]\
+#          }'
+#
+##          if [ "$response" != "$expected_response" ]; then
+##            echo "Test failed."
+##            exit 1
+##          else
+##            echo "Test passed."
+##          fi
+##TODO: Fix test case
+
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 jobs:
-  test-api:
+  test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    # Step 1: Checkout the code
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
+    # Step 2: Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pylint black
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-    #  - name: Run Pylint
-    #    run: |
-    #      pylint app services  # Replace with your actual source code directories
-
-    #  - name: Run Black (check formatting)
-    #    run: |
-    #      black --check app services  # Replace with your actual source code directories
-
-      - name: Set OpenAI API Key
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.exportVariable('OPENAI_API_KEY', '${{ secrets.OPENAI_API_KEY }}')
-      - name: Start the application
-        run: |
-          uvicorn app.main:app --host 0.0.0.0 --port 8000 &
-          sleep 5
-      - name: Test synonym endpoint
-        run: |
-          response=$(
-              curl -X 'POST' \
-                'http://0.0.0.0:8000/synonyms' \
-                -H 'accept: application/json' \
-                -H 'Content-Type: application/json' \
-                -d '{"word": "happy"}')
-
-          echo "Response: $response"
-          expected_response='{\
-            "input_word": "happy",\
-            "synonyms": [\
-             { "word": "Satisfied", "similarity_score": 0.8788865672375774 },\
-             { "word": "Joyful", "similarity_score": 0.8756128925394083 },\
-             { "word": "Delighted", "similarity_score": 0.8715022920174671 },\
-             { "word": "Overjoyed", "similarity_score": 0.8705681160791444 },\
-             { "word": "Cheerful", "similarity_score": 0.8683411862014206 },\
-             { "word": "Pleased", "similarity_score": 0.8682256709863314 },\
-             { "word": "Blissful", "similarity_score": 0.861055955819963 },\
-             { "word": "Ecstatic", "similarity_score": 0.8563332438024521 },\
-             { "word": "Thrilled", "similarity_score": 0.8561114671979105 },\
-             { "word": "Content", "similarity_score": 0.8203253452188227 }\
-            ]\
-          }'
-
-#          if [ "$response" != "$expected_response" ]; then
-#            echo "Test failed."
-#            exit 1
-#          else
-#            echo "Test passed."
-#          fi
-#TODO: Fix test case
+    # Step 4: Run pytest
+    - name: Run tests with pytest
+      run: |
+        pytest --maxfail=5 --disable-warnings --cov=services tests/

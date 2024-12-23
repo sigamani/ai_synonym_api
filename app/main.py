@@ -16,7 +16,6 @@ embedding_service = EmbeddingService()
 
 class WordRequest(BaseModel):
     """Request model for the /synonyms endpoint."""
-
     word: str
 
 
