@@ -52,20 +52,19 @@ jobs:
                 -d '{"word": "happy"}')
 
           echo "Response: $response"
-
           expected_response='{\
             "input_word": "happy",\
             "synonyms": [\
-              {"word": "Joyful", "similarity_score": 0.5850727882362465},\
-              {"word": "Glad", "similarity_score": 0.5614796465770227},\
-              {"word": "Cheerful", "similarity_score": 0.5558027769025328},\
-              {"word": "Delighted", "similarity_score": 0.5462781052460954},\
-              {"word": "Pleased", "similarity_score": 0.5436315751143872},\
-              {"word": "Elated", "similarity_score": 0.5330383935437045},\
-              {"word": "Ecstatic", "similarity_score": 0.5243368697389907},\
-              {"word": "Jovial", "similarity_score": 0.47522304082557587},\
-              {"word": "Merry", "similarity_score": 0.4476358721685514},\
-              {"word": "Content", "similarity_score": 0.3661071399499329}\
+             { "word": "Satisfied", "similarity_score": 0.8788865672375774 },\
+             { "word": "Joyful", "similarity_score": 0.8756128925394083 },\
+             { "word": "Delighted", "similarity_score": 0.8715022920174671 },\
+             { "word": "Overjoyed", "similarity_score": 0.8705681160791444 },\
+             { "word": "Cheerful", "similarity_score": 0.8683411862014206 },\
+             { "word": "Pleased", "similarity_score": 0.8682256709863314 },\
+             { "word": "Blissful", "similarity_score": 0.861055955819963 },\
+             { "word": "Ecstatic", "similarity_score": 0.8563332438024521 },\
+             { "word": "Thrilled", "similarity_score": 0.8561114671979105 },\
+             { "word": "Content", "similarity_score": 0.8203253452188227 }\
             ]\
           }'
 
