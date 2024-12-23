@@ -14,7 +14,7 @@ A scalable API to fetch synonyms for a given word using OpenAI's language models
 
 1. Clone the repository:
    ```bash
-   git clone <repo-url>
+   git clone https://github.com/sigamani/ai_synonym_api.git
    cd ai_synonym_api
    ```
 
