@@ -110,4 +110,4 @@ jobs:
     # Step 4: Run pytest
     - name: Run tests with pytest
       run: |
-        pytest --maxfail=5 --disable-warnings --cov=services tests/
+        pytest app/tests/
