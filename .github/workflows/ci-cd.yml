@@ -44,11 +44,12 @@ jobs:
           sleep 5
       - name: Test synonym endpoint
         run: |
-          response=$(curl -X 'POST' \
-            'http://127.0.0.1:8000/synonyms' \
-            -H 'accept: application/json' \
-            -H 'Content-Type: application/json' \
-            -d '{"word": "happy"}')
+          response=$(
+              curl -X 'POST' \
+                'http://0.0.0.0:8000/synonyms' \
+                -H 'accept: application/json' \
+                -H 'Content-Type: application/json' \
+                -d '{"word": "happy"}'
 
           echo "Response: $response"
 
