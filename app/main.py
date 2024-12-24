@@ -1,47 +1,50 @@
-"""
-Main application entry point for the AI Synonym API.
-This module contains the FastAPI app and its routes.
-"""
-
-import os
 from fastapi import FastAPI, HTTPException
-from openai import OpenAI
-from pydantic import BaseModel
-from services.embedding_service import (
-    EmbeddingService,
-)  # import directly rather than defining a class with same name in main.py.
+from pydantic import BaseModel, Field
+from typing import List
 from services.synonym_service import SynonymService
+from fastapi.responses import JSONResponse
 
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+# Initialize FastAPI app
+app = FastAPI()
 
-app = FastAPI(
-    title="AI Synonym API", description="Generates and sorts synonyms using OpenAI"
-)
-
+# Dependency injection for services
 synonym_service = SynonymService()
-embedding_service = EmbeddingService()
 
 
-class WordRequest(BaseModel):
-    """Request model for the /synonyms endpoint."""
-
-    word: str
-
-
+# Pydantic models
 class SynonymResponse(BaseModel):
-    """Response model for the /synonyms endpoint."""
-
-    input_word: str
-    synonyms: list[dict]
+    synonyms: List[str] = Field(..., description="List of synonyms for the input word.")
 
 
-@app.post("/synonyms", response_model=SynonymResponse)
-async def get_synonyms(request: WordRequest) -> SynonymResponse:
-    """Endpoint for retrieving synonyms for a given word."""
-    input_word = request.word.strip()
-    if not input_word:
-        raise HTTPException(status_code=400, detail="Input word cannot be empty.")
+class ErrorResponse(BaseModel):
+    detail: str = Field(..., description="Error message describing the issue.")
 
-    synonyms = await synonym_service.generate_synonyms(input_word)
-    sorted_synonyms = await embedding_service.sort_by_similarity(input_word, synonyms)
-    return SynonymResponse(input_word=input_word, synonyms=sorted_synonyms)
+
+@app.get(
+    "/synonyms/{word}",
+    response_model=SynonymResponse,
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid input word."},
+        500: {"model": ErrorResponse, "description": "Internal server error."},
+    },
+)
+@app.get(
+    "/synonyms/{word}",
+    response_model=SynonymResponse,
+    responses={
+        400: {"model": ErrorResponse, "description": "Invalid input word."},
+        500: {"model": ErrorResponse, "description": "Internal server error."},
+    },
+)
+async def get_synonyms(word: str):
+    if not await synonym_service.validate_word(word):
+        raise HTTPException(status_code=400, detail="Invalid word")
+
+    try:
+        synonyms = await synonym_service.generate_synonyms(word)
+        return SynonymResponse(synonyms=synonyms)
+    except Exception as e:
+        # Explicitly return a JSON response for 500 errors
+        return JSONResponse(
+            status_code=500, content={"detail": "Internal server error"}
+        )
