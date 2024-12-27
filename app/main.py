@@ -72,6 +72,4 @@ async def get_synonyms(
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
     except Exception as error:
-        raise HTTPException(
-            status_code=500, detail=f"Internal server error: {str(error)}"
-        )
+        raise HTTPException(status_code=500, detail="Internal server error")
