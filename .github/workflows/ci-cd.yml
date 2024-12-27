@@ -79,7 +79,7 @@ jobs:
       # Step 4: Run pylint for static analysis
     - name: Run pylint
       run: |
-        pylint app/ services/
+        pylint --fail-under=8.0 app/ services/
 
       # Step 5: Run black for code formatting check
     - name: Run black (check mode)
