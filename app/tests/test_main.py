@@ -1,64 +1,83 @@
+"""
+Unit tests for the FastAPI application in app.main.
+"""
+
+from unittest.mock import AsyncMock
+
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import AsyncMock
-from app.main import app
+
+from app.main import app, get_synonym_service
 from services.synonym_service import SynonymService
 
-# TestClient setup
 client = TestClient(app)
 
 
-# Mock SynonymService
-@pytest.fixture
-def mock_synonym_service(monkeypatch):
-    """Fixture to mock SynonymService methods."""
-    mock_service = SynonymService()
-    mock_service.validate_word = AsyncMock()
-    mock_service.generate_synonyms = AsyncMock()
-    monkeypatch.setattr("app.main.synonym_service", mock_service)
-    return mock_service
+class MockSynonymService:
+    """
+    Mocked SynonymService for testing purposes.
+    """
+
+    async def validate_word(self, word: str) -> bool:
+        return True
+
+    async def generate_synonyms(self, word: str):
+        return ["happy", "joyful", "elated"]
 
 
-@pytest.mark.asyncio
-async def test_get_synonyms_valid_word(mock_synonym_service):
-    """Test /synonyms/{word} endpoint with a valid word."""
-    mock_synonym_service.validate_word.return_value = True
-    mock_synonym_service.generate_synonyms.return_value = ["happy", "joyful", "elated"]
+def override_get_synonym_service():
+    return MockSynonymService()
 
-    response = client.get("/synonyms/example")
+
+@pytest.fixture(autouse=True)
+def apply_monkeypatch(monkeypatch):
+    """
+    Fixture to override the SynonymService dependency.
+    """
+    app.dependency_overrides[get_synonym_service] = override_get_synonym_service
+    yield
+    app.dependency_overrides.clear()
+
+
+def test_get_synonyms_valid_word():
+    """
+    Test /synonyms endpoint with a valid word.
+    """
+    response = client.post("/synonyms", json={"word": "example"})
     assert response.status_code == 200
-    assert response.json() == {"synonyms": ["happy", "joyful", "elated"]}
-    mock_synonym_service.validate_word.assert_called_once_with("example")
-    mock_synonym_service.generate_synonyms.assert_called_once_with("example")
+    assert response.json() == {
+        "word": "example",
+        "synonyms": ["happy", "joyful", "elated"],
+    }
 
 
-@pytest.mark.asyncio
-async def test_get_synonyms_invalid_word(mock_synonym_service):
-    """Test /synonyms/{word} endpoint with an invalid word."""
-    mock_synonym_service.validate_word.return_value = False
+def test_get_synonyms_invalid_word():
+    """
+    Test /synonyms endpoint with an invalid word.
+    """
 
-    response = client.get("/synonyms/1234")
+    class InvalidWordMockService(MockSynonymService):
+        async def validate_word(self, word: str) -> bool:
+            return False
+
+    app.dependency_overrides[get_synonym_service] = lambda: InvalidWordMockService()
+
+    response = client.post("/synonyms", json={"word": "1234"})
     assert response.status_code == 400
-    assert response.json() == {"detail": "Invalid word"}
-    mock_synonym_service.validate_word.assert_called_once_with("1234")
-    mock_synonym_service.generate_synonyms.assert_not_called()
+    assert response.json() == {"detail": "Invalid word input."}
 
 
-@pytest.mark.asyncio
-async def test_get_synonyms_empty_word(mock_synonym_service):
-    """Test /synonyms/{word} endpoint with an empty word."""
-    mock_synonym_service.validate_word.return_value = False
+def test_get_synonyms_internal_error():
+    """
+    Test /synonyms endpoint when generate_synonyms raises an error.
+    """
 
-    response = client.get("/synonyms/")
-    assert response.status_code == 404  # FastAPI raises a 404 for missing path params
+    class ErrorMockService(MockSynonymService):
+        async def generate_synonyms(self, word: str):
+            raise ValueError("Internal error")
 
+    app.dependency_overrides[get_synonym_service] = lambda: ErrorMockService()
 
-@pytest.mark.asyncio
-async def test_get_synonyms_internal_error(mock_synonym_service):
-    """Test /synonyms/{word} endpoint when generate_synonyms raises an error."""
-    mock_synonym_service.validate_word.return_value = True
-    mock_synonym_service.generate_synonyms.side_effect = Exception("Internal error")
-
-    response = client.get("/synonyms/example")
+    response = client.post("/synonyms", json={"word": "example"})
     assert response.status_code == 500
-    assert "Internal server error" in response.text
+    assert response.json() == {"detail": "Internal server error"}
