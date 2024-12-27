@@ -16,11 +16,13 @@ app = FastAPI()
 
 class SynonymRequest(BaseModel):
     """Request model for generating synonyms."""
+
     word: str
 
 
 class SynonymResponse(BaseModel):
     """Response model for returning ranked synonyms."""
+
     input_word: str
     synonyms: List[dict]
 
@@ -52,7 +54,9 @@ async def get_synonyms(
     try:
         await synonym_service.validate_word(input_word)
         synonyms = await synonym_service.generate_synonyms(input_word)
-        ranked_synonyms = await embedding_service.sort_by_similarity(input_word, synonyms)
+        ranked_synonyms = await embedding_service.sort_by_similarity(
+            input_word, synonyms
+        )
         return SynonymResponse(input_word=input_word, synonyms=ranked_synonyms)
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error

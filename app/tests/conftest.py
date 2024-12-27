@@ -8,8 +8,15 @@ import pytest
 from services.synonym_service_v1 import SynonymService, EmbeddingService
 
 
+@pytest.fixture(autouse=True)
+def set_dummy_openai_key(monkeypatch):
+    """Set a dummy OPENAI_API_KEY for tests."""
+    monkeypatch.setenv("OPENAI_API_KEY", "dummy-key")
+
+
 class MockSynonymService(SynonymService):
     """Mocked implementation of SynonymService."""
+
     async def validate_word(self, word):
         return True
 
@@ -19,6 +26,7 @@ class MockSynonymService(SynonymService):
 
 class MockEmbeddingService(EmbeddingService):
     """Mocked implementation of EmbeddingService."""
+
     async def sort_by_similarity(self, word, synonyms):
         return [{"word": synonym, "similarity_score": 0.99} for synonym in synonyms]
 
@@ -27,4 +35,6 @@ class MockEmbeddingService(EmbeddingService):
 def override_dependencies(monkeypatch):
     """Override dependencies with mock services."""
     monkeypatch.setattr("app.main.get_synonym_service", lambda: MockSynonymService())
-    monkeypatch.setattr("app.main.get_embedding_service", lambda: MockEmbeddingService())
+    monkeypatch.setattr(
+        "app.main.get_embedding_service", lambda: MockEmbeddingService()
+    )
