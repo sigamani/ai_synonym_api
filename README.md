@@ -17,7 +17,45 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 - Python 3.11 or above
 - OpenAI API key (required for GPT-4 and embeddings)
 
-### Clone the Repository
+## Setup Instructions
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sigamani/ai_synonym_api.git
+   cd ai_synonym_api
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Set up your OpenAI API key:
+   ```bash
+   export OPENAI_API_KEY="your_api_key"
+   ```
+
+4. Run the application locally:
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+5. Access API documentation at `http://127.0.0.1:8000/docs`.
+
+## Testing
+
+Run tests with Pytest:
+
 ```bash
-git clone https://github.com/sigamani/ai_synonym_api.git
-cd ai_synonym_api
+pytest --cov=app tests/
+```
+
+## Docker Deployment
+
+1. Build and run the Docker container:
+   ```bash
+   docker build -t ai-synonym-api .
+   docker run -p 8000:8000 ai-synonym-api
+   ```
+
+2. Access the application at `http://127.0.0.1:8000`.
