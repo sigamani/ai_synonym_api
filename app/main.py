@@ -16,11 +16,13 @@ app = FastAPI()
 
 class SynonymRequest(BaseModel):
     """Request model for generating synonyms."""
+
     word: str
 
 
 class SynonymResponse(BaseModel):
     """Response model for returning ranked synonyms."""
+
     input_word: str
     synonyms: List[dict]
 
@@ -56,14 +58,20 @@ async def get_synonyms(
         # Generate synonyms
         synonyms = await synonym_service.generate_synonyms(input_word)
         if not synonyms:
-            raise HTTPException(status_code=400, detail="No synonyms could be generated.")
+            raise HTTPException(
+                status_code=400, detail="No synonyms could be generated."
+            )
 
         # Rank synonyms by similarity
-        ranked_synonyms = await embedding_service.sort_by_similarity(input_word, synonyms)
+        ranked_synonyms = await embedding_service.sort_by_similarity(
+            input_word, synonyms
+        )
 
         return SynonymResponse(input_word=input_word, synonyms=ranked_synonyms)
 
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
     except Exception as error:
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(error)}")
+        raise HTTPException(
+            status_code=500, detail=f"Internal server error: {str(error)}"
+        )

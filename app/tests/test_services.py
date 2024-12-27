@@ -1,6 +1,7 @@
 import pytest
 from services.synonym_service_v1 import SynonymService
 
+
 @pytest.mark.asyncio
 async def test_validate_word_valid():
     """Test validate_word with a valid word."""

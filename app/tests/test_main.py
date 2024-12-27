@@ -4,6 +4,7 @@ from app.main import app, get_synonym_service, get_embedding_service
 
 client = TestClient(app)
 
+
 # Mock services
 class MockSynonymService:
     async def validate_word(self, word):
@@ -12,15 +13,16 @@ class MockSynonymService:
     async def generate_synonyms(self, word):
         return ["happy", "joyful", "cheerful"]
 
+
 class MockEmbeddingService:
     async def sort_by_similarity(self, word, synonyms):
-        return [
-            {"word": synonym, "similarity_score": 0.99} for synonym in synonyms
-        ]
+        return [{"word": synonym, "similarity_score": 0.99} for synonym in synonyms]
+
 
 # Dependency overrides
 app.dependency_overrides[get_synonym_service] = lambda: MockSynonymService()
 app.dependency_overrides[get_embedding_service] = lambda: MockEmbeddingService()
+
 
 def test_synonyms_endpoint_valid_word():
     """
@@ -65,7 +67,9 @@ async def test_missing_api_key(monkeypatch):
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     from services.synonym_service_v1 import SynonymService
 
-    with pytest.raises(EnvironmentError, match="Missing OPENAI_API_KEY environment variable."):
+    with pytest.raises(
+        EnvironmentError, match="Missing OPENAI_API_KEY environment variable."
+    ):
         SynonymService()
 
 
@@ -73,6 +77,7 @@ def test_synonyms_service_openai_error(monkeypatch):
     """
     Test the /synonyms endpoint when OpenAI API raises an error.
     """
+
     class ErrorMockService:
         async def validate_word(self, word):
             return True

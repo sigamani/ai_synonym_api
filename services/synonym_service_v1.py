@@ -11,6 +11,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
+
 class SynonymService:
     def __init__(self):
         """Initialize the SynonymService with OpenAI client and API key."""
@@ -27,7 +28,7 @@ class SynonymService:
         if len(word) > 50:
             return False  # Words that are excessively long.
         if len(word.split()) > 1:
-            return False # Input cannot contain more than one word.
+            return False  # Input cannot contain more than one word.
         return True
 
     async def generate_synonyms(self, word: str) -> list[str]:
@@ -53,7 +54,6 @@ class SynonymService:
         return [s.strip() for s in synonyms if s.strip()]
 
 
-
 class EmbeddingService:
     def __init__(self):
         """Initialize the EmbeddingService with OpenAI client and API key."""
@@ -64,7 +64,9 @@ class EmbeddingService:
 
     async def get_embeddings(self, words: list[str]) -> list[list[float]]:
         """Returns embeddings as a for a list of words."""
-        response = self.client.embeddings.create(model="text-embedding-ada-002", input=words)
+        response = self.client.embeddings.create(
+            model="text-embedding-ada-002", input=words
+        )
         return [item.embedding for item in response.data]
 
     async def sort_by_similarity(self, word: str, synonyms: list[str]) -> list[dict]:
