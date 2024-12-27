@@ -38,7 +38,7 @@ jobs:
         script: |
            core.exportVariable('OPENAI_API_KEY', '${{ secrets.OPENAI_API_KEY }}')
 
-      # Step 4: Run pylint for static analysis
+      # Step 4: Run pylint for static analysis check (fails under 8/10)
     - name: Run pylint
       run: |
         pylint --fail-under=8.0 app/ services/

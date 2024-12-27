@@ -1,83 +1,87 @@
-"""
-Unit tests for the FastAPI application in app.main.
-"""
-
-from unittest.mock import AsyncMock
-
 import pytest
 from fastapi.testclient import TestClient
-
-from app.main import app, get_synonym_service
-from services.synonym_service import SynonymService
+from app.main import app, get_synonym_service, get_embedding_service
 
 client = TestClient(app)
 
-
+# Mock services
 class MockSynonymService:
-    """
-    Mocked SynonymService for testing purposes.
-    """
-
-    async def validate_word(self, word: str) -> bool:
+    async def validate_word(self, word):
         return True
 
-    async def generate_synonyms(self, word: str):
-        return ["happy", "joyful", "elated"]
+    async def generate_synonyms(self, word):
+        return ["happy", "joyful", "cheerful"]
 
+class MockEmbeddingService:
+    async def sort_by_similarity(self, word, synonyms):
+        return [
+            {"word": synonym, "similarity_score": 0.99} for synonym in synonyms
+        ]
 
-def override_get_synonym_service():
-    return MockSynonymService()
+# Dependency overrides
+app.dependency_overrides[get_synonym_service] = lambda: MockSynonymService()
+app.dependency_overrides[get_embedding_service] = lambda: MockEmbeddingService()
 
-
-@pytest.fixture(autouse=True)
-def apply_monkeypatch(monkeypatch):
+def test_synonyms_endpoint_valid_word():
     """
-    Fixture to override the SynonymService dependency.
+    Test the /synonyms endpoint with a valid word.
     """
-    app.dependency_overrides[get_synonym_service] = override_get_synonym_service
-    yield
-    app.dependency_overrides.clear()
-
-
-def test_get_synonyms_valid_word():
-    """
-    Test /synonyms endpoint with a valid word.
-    """
-    response = client.post("/synonyms", json={"word": "example"})
+    response = client.post("/synonyms", json={"word": "happy"})
     assert response.status_code == 200
-    assert response.json() == {
-        "word": "example",
-        "synonyms": ["happy", "joyful", "elated"],
+    expected_response = {
+        "input_word": "happy",
+        "synonyms": [
+            {"word": "happy", "similarity_score": 0.99},
+            {"word": "joyful", "similarity_score": 0.99},
+            {"word": "cheerful", "similarity_score": 0.99},
+        ],
     }
+    assert response.json() == expected_response
 
 
-def test_get_synonyms_invalid_word():
+def test_synonyms_endpoint_empty_word():
     """
-    Test /synonyms endpoint with an invalid word.
+    Test the /synonyms endpoint with an empty word.
     """
+    response = client.post("/synonyms", json={"word": ""})
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Input word cannot be empty."
 
-    class InvalidWordMockService(MockSynonymService):
-        async def validate_word(self, word: str) -> bool:
-            return False
 
-    app.dependency_overrides[get_synonym_service] = lambda: InvalidWordMockService()
-
+def test_synonyms_endpoint_invalid_word():
+    """
+    Test the /synonyms endpoint with an invalid word (e.g., non-alphabetic).
+    """
     response = client.post("/synonyms", json={"word": "1234"})
     assert response.status_code == 400
-    assert response.json() == {"detail": "Invalid word input."}
+    assert "Invalid word" in response.json()["detail"]
 
 
-def test_get_synonyms_internal_error():
+@pytest.mark.asyncio
+async def test_missing_api_key(monkeypatch):
     """
-    Test /synonyms endpoint when generate_synonyms raises an error.
+    Test SynonymService when the API key is missing.
     """
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    from services.synonym_service_v1 import SynonymService
 
-    class ErrorMockService(MockSynonymService):
-        async def generate_synonyms(self, word: str):
-            raise ValueError("Internal error")
+    with pytest.raises(EnvironmentError, match="Missing OPENAI_API_KEY environment variable."):
+        SynonymService()
 
-    app.dependency_overrides[get_synonym_service] = lambda: ErrorMockService()
 
-    response = client.post("/synonyms", json={"word": "example"})
+def test_synonyms_service_openai_error(monkeypatch):
+    """
+    Test the /synonyms endpoint when OpenAI API raises an error.
+    """
+    class ErrorMockService:
+        async def validate_word(self, word):
+            return True
+
+        async def generate_synonyms(self, word):
+            raise ValueError("OpenAI API error")
+
+    monkeypatch.setattr("app.main.get_synonym_service", lambda: ErrorMockService())
+
+    response = client.post("/synonyms", json={"word": "happy"})
     assert response.status_code == 500
-    assert response.json() == {"detail": "Internal server error"}
+    assert response.json()["detail"] == "Internal server error"

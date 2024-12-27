@@ -1,54 +1,69 @@
 """
-Main module for the AI Synonym API using FastAPI.
+Main module for the Synonym API using FastAPI.
+
+This API accepts a single word, generates synonyms using SynonymService,
+computes their embeddings using EmbeddingService, and ranks the synonyms
+based on cosine similarity to the input word.
 """
 
-from typing import List
-
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
-
-from services.synonym_service import SynonymService
+from typing import List
+from services.synonym_service_v1 import SynonymService, EmbeddingService
 
 app = FastAPI()
 
 
 class SynonymRequest(BaseModel):
-    """
-    Request model for synonym generation.
-    """
-
+    """Request model for generating synonyms."""
     word: str
 
 
 class SynonymResponse(BaseModel):
-    """
-    Response model for synonym generation.
-    """
-
-    word: str
-    synonyms: List[str]
+    """Response model for returning ranked synonyms."""
+    input_word: str
+    synonyms: List[dict]
 
 
-def get_synonym_service():
-    """
-    Dependency injection for SynonymService.
-    """
+def get_synonym_service() -> SynonymService:
+    """Dependency injection for SynonymService."""
     return SynonymService()
+
+
+def get_embedding_service() -> EmbeddingService:
+    """Dependency injection for EmbeddingService."""
+    return EmbeddingService()
 
 
 @app.post("/synonyms", response_model=SynonymResponse)
 async def get_synonyms(
     request: SynonymRequest,
     synonym_service: SynonymService = Depends(get_synonym_service),
+    embedding_service: EmbeddingService = Depends(get_embedding_service),
 ):
     """
-    Endpoint to get synonyms for a given word.
+    Endpoint to generate and rank synonyms for a given word.
     """
-    is_valid = await synonym_service.validate_word(request.word)
-    if not is_valid:
-        raise HTTPException(status_code=400, detail="Invalid word input.")
+    input_word = request.word.strip().lower()
+
+    if not input_word:
+        raise HTTPException(status_code=400, detail="Input word cannot be empty.")
+
     try:
-        synonyms = await synonym_service.generate_synonyms(request.word)
-        return SynonymResponse(word=request.word, synonyms=synonyms)
+        # Validate input word
+        await synonym_service.validate_word(input_word)
+
+        # Generate synonyms
+        synonyms = await synonym_service.generate_synonyms(input_word)
+        if not synonyms:
+            raise HTTPException(status_code=400, detail="No synonyms could be generated.")
+
+        # Rank synonyms by similarity
+        ranked_synonyms = await embedding_service.sort_by_similarity(input_word, synonyms)
+
+        return SynonymResponse(input_word=input_word, synonyms=ranked_synonyms)
+
     except ValueError as error:
-        raise HTTPException(status_code=500, detail="Internal server error") from error
+        raise HTTPException(status_code=400, detail=str(error))
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(error)}")
