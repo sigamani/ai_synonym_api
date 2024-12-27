@@ -1,64 +1,23 @@
 # AI Synonym API
 
-## Description
-
-A scalable API to fetch synonyms for a given word using OpenAI's language models and embedding services.
+The AI Synonym API is a FastAPI-based application that generates a ranked list of synonyms for a given input word. It leverages OpenAI's GPT-4 to generate synonyms and ranks them by embedding similarity using OpenAI's embedding model.
 
 ## Features
+- Generate 10 synonyms for any valid input word using OpenAI GPT-4.
+- Rank synonyms based on their semantic similarity to the input word using cosine similarity of embeddings.
+- Provides a clean and user-friendly RESTful API.
+- Robust error handling for invalid inputs and API failures.
+- Asynchronous processing for high performance.
 
-- Generate a list of synonyms for an input word.
-- Sort synonyms by semantic similarity.
-- Designed using FastAPI for efficiency.
+---
 
-## Setup Instructions
+## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/sigamani/ai_synonym_api.git
-   cd ai_synonym_api
-   ```
+### Prerequisites
+- Python 3.11 or above
+- OpenAI API key (required for GPT-4 and embeddings)
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Set up your OpenAI API key:
-   ```bash
-   export OPENAI_API_KEY="your_api_key"
-   ```
-
-4. Run the application locally:
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-
-5. Access API documentation at `http://127.0.0.1:8000/docs`.
-
-## Testing
-
-Run tests with Pytest:
-
+### Clone the Repository
 ```bash
-pytest --cov=app tests/
-```
-
-## Docker Deployment
-
-1. Build and run the Docker container:
-   ```bash
-   docker build -t ai-synonym-api .
-   docker run -p 8000:8000 ai-synonym-api
-   ```
-
-2. Access the application at `http://127.0.0.1:8000`.
-
-## AWS Deployment
-
-1. Use Terraform to set up CI/CD pipeline and deployment:
-   ```bash
-   cd terraform
-   terraform init
-   terraform apply
-   ```
-2. Ensure your AWS credentials are configured using `aws configure`.
+git clone https://github.com/sigamani/ai_synonym_api.git
+cd ai_synonym_api
