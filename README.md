@@ -8,7 +8,7 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 - Provides a clean and user-friendly RESTful API.
 - Error handling for invalid inputs and API failures.
 - Asynchronous processing for high performance.
-- Backlog for future improvements here: [click me](https://github.com/users/sigamani/projects/3/views/1)  
+- Backlog for future improvements here: [Click Here](https://github.com/users/sigamani/projects/3/views/1)  
 
 ---
 
@@ -65,7 +65,9 @@ pytest --disable-warnings
 1. Build and run the Docker container:
    ```bash
    docker build -t ai-synonym-api .
-   docker run -p 8000:8000 ai-synonym-api
+   docker run ai_synonym_api 
    ```
 
 2. Access the application at `http://127.0.0.1:8000`.
+
+3. Heroku test deployment `https://ai-synonym-api-183624b326d2.herokuapp.com/`.
