@@ -9,8 +9,6 @@ import os
 from openai import OpenAI
 from sklearn.metrics.pairwise import cosine_similarity
 
-# client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-
 
 class SynonymService:
     def __init__(self):
