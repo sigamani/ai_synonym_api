@@ -16,13 +16,11 @@ app = FastAPI()
 
 class SynonymRequest(BaseModel):
     """Request model for generating synonyms."""
-
     word: str
 
 
 class SynonymResponse(BaseModel):
     """Response model for returning ranked synonyms."""
-
     input_word: str
     synonyms: List[dict]
 
