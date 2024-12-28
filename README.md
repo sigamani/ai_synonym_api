@@ -8,6 +8,7 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 - Provides a clean and user-friendly RESTful API.
 - Error handling for invalid inputs and API failures.
 - Asynchronous processing for high performance.
+- Backlog for future improvements: https://github.com/users/sigamani/projects/3/views/1 
 
 ---
 
