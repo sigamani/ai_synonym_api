@@ -20,14 +20,14 @@ EXPOSE 8000
 # Command to run the application
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
-#services:
-#  api-service:
-#      build:
-#        dockerfile: Dockerfile
-#        context: ./api-service
-#      environment:
-#        - PORT=5000
-#      volumes:
-#        - ./api-service:/app
-#      ports:
-#        - 5000:5000
+services:
+ api-service:
+     build:
+       dockerfile: Dockerfile
+       context: ./api-service
+     environment:
+       - PORT=5000
+     volumes:
+       - ./api-service:/app
+     ports:
+       - 5000:5000

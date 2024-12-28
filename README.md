@@ -1,14 +1,21 @@
 # AI Synonym API
 
-## Description
-
-A scalable API to fetch synonyms for a given word using OpenAI's language models and embedding services.
+The AI Synonym API is a FastAPI-based application that generates a ranked list of synonyms for a given input word. It leverages OpenAI's GPT-4 to generate synonyms and ranks them by embedding similarity using OpenAI's embedding model.
 
 ## Features
+- Generate 10 synonyms for any valid input word using OpenAI GPT-4.
+- Rank synonyms based on their semantic similarity to the input word using cosine similarity of embeddings.
+- Provides a clean and user-friendly RESTful API.
+- Robust error handling for invalid inputs and API failures.
+- Asynchronous processing for high performance.
 
-- Generate a list of synonyms for an input word.
-- Sort synonyms by semantic similarity.
-- Designed using FastAPI for efficiency.
+---
+
+## Installation
+
+### Prerequisites
+- Python 3.11 or above
+- OpenAI API key (required for GPT-4 and embeddings)
 
 ## Setup Instructions
 
@@ -40,7 +47,7 @@ A scalable API to fetch synonyms for a given word using OpenAI's language models
 Run tests with Pytest:
 
 ```bash
-pytest --cov=app tests/
+pytest --disable-warnings
 ```
 
 ## Docker Deployment
@@ -52,13 +59,3 @@ pytest --cov=app tests/
    ```
 
 2. Access the application at `http://127.0.0.1:8000`.
-
-## AWS Deployment
-
-1. Use Terraform to set up CI/CD pipeline and deployment:
-   ```bash
-   cd terraform
-   terraform init
-   terraform apply
-   ```
-2. Ensure your AWS credentials are configured using `aws configure`.
