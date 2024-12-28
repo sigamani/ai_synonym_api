@@ -32,34 +32,42 @@ jobs:
         pip install -r requirements.txt
         pip install pylint black
 
+    # Step 4: Set OpenAI API Key
     - name: Set OpenAI API Key
       uses: actions/github-script@v6
       with:
         script: |
            core.exportVariable('OPENAI_API_KEY', '${{ secrets.OPENAI_API_KEY }}')
 
-      # Step 4: Run pylint for static analysis check (fails under 9/10)
+      # Step 5: Run pylint for static analysis check (fails under 9/10)
     - name: Run pylint
       run: |
         pylint --fail-under=9.0 app/ services/
 
-      # Step 5: Run black for code formatting check
+      # Step 6: Run black for code formatting check
     - name: Run black (check mode)
       run: |
         black --check app/ services/
 
-      # Step 4: Run pytest to test the application
+      # Step 7: Run pytest to test the application
     - name: Run tests with pytest
       run: |
         pytest app/tests/
 
-      # Step 5: Wait for the server to start
+      # Step 8: Start the application
+    - name: Start application
+      run: |
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      # Step 9: Wait for the server
     - name: Wait for application to start
       run: |
         sleep 5
         curl --fail http://0.0.0.0:8000/docs
 
-      # Step 6: Run a curl test
+      # Step 10: Run a curl test
     - name: Test /synonyms endpoint
       run: |
         RESPONSE=$(curl -X 'POST' \
