@@ -1,7 +1,7 @@
 """
-Module for a simple v1 implementation of the synonym app class.
+Module for a simple v1 implementation of the synonym app.
 
-This class processes a single word by generating synonyms, computing their embeddings,
+This module processes a single word by generating synonyms, computing their embeddings,
 and returning the synonyms ranked by cosine similarity to the input word.
 """
 
