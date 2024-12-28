@@ -47,7 +47,7 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 Run tests with Pytest:
 
 ```bash
-pytest --cov=app tests/
+pytest --disable-warnings
 ```
 
 ## Docker Deployment
