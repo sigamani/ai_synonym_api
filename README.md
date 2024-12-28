@@ -43,10 +43,10 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 5. Use the following curl command to test:
    ```bash
    curl -X POST \
-  'http://127.0.0.1:8000/synonyms' \
-  -H 'accept: application/json' \
-  -H 'Content-Type: application/json' \
-  -d '{"word": "happy"}'
+   'http://127.0.0.1:8000/synonyms' \
+   -H 'accept: application/json' \
+   -H 'Content-Type: application/json' \
+   -d '{"word": "happy"}'
    ```
    
 7. Access API documentation at `http://127.0.0.1:8000/docs`.
