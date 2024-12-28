@@ -6,7 +6,7 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 - Generate 10 synonyms for any valid input word using OpenAI GPT-4.
 - Rank synonyms based on their semantic similarity to the input word using cosine similarity of embeddings.
 - Provides a clean and user-friendly RESTful API.
-- Robust error handling for invalid inputs and API failures.
+- Error handling for invalid inputs and API failures.
 - Asynchronous processing for high performance.
 
 ---
@@ -14,7 +14,7 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 ## Installation
 
 ### Prerequisites
-- Python 3.11 or above
+- Python 3.11
 - OpenAI API key (required for GPT-4 and embeddings)
 
 ## Setup Instructions
