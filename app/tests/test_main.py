@@ -18,7 +18,7 @@ def test_synonyms_service_openai_error(monkeypatch):
     """Test the /synonyms endpoint when OpenAI API raises an error."""
 
     class ErrorMockService:
-        async def validate_word(self, word):
+        async def validate_word(self):
             return True
 
         async def generate_synonyms(self, word):
