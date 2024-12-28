@@ -1,3 +1,6 @@
+"""
+Unit tests for the SynonymService.
+"""
 import pytest
 from services.synonym_service_v1 import SynonymService
 
