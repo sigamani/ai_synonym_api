@@ -12,7 +12,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
     # Step 1: Checkout the code
@@ -23,7 +23,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.11.11'
 
     # Step 3: Install dependencies
     - name: Install dependencies
@@ -38,10 +38,10 @@ jobs:
         script: |
            core.exportVariable('OPENAI_API_KEY', '${{ secrets.OPENAI_API_KEY }}')
 
-      # Step 4: Run pylint for static analysis check (fails under 8/10)
+      # Step 4: Run pylint for static analysis check (fails under 9/10)
     - name: Run pylint
       run: |
-        pylint --fail-under=8.0 app/ services/
+        pylint --fail-under=9.0 app/ services/
 
       # Step 5: Run black for code formatting check
     - name: Run black (check mode)
@@ -52,3 +52,27 @@ jobs:
     - name: Run tests with pytest
       run: |
         pytest app/tests/
+
+      # Step 5: Wait for the server to start
+    - name: Wait for application to start
+      run: |
+        sleep 5
+        curl --fail http://0.0.0.0:8000/docs
+
+      # Step 6: Run a curl test
+    - name: Test /synonyms endpoint
+      run: |
+        RESPONSE=$(curl -X 'POST' \
+          'http://0.0.0.0:8000/synonyms' \
+          -H 'accept: application/json' \
+          -H 'Content-Type: application/json' \
+          -d '{"word": "happy"}')
+        echo "$RESPONSE"
+        if ! echo "$RESPONSE" | grep -q '"input_word": "happy"'; then
+          echo "Test failed: Input word not matched in response"
+          exit 1
+        fi
+        if ! echo "$RESPONSE" | grep -q '"synonyms"'; then
+          echo "Test failed: Synonyms not found in response"
+          exit 1
+        fi
