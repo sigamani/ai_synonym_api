@@ -1,0 +1,4 @@
+[
+    {"word": "happy", "ground_truth": ["joyful", "cheerful", "content", "glad"]},
+    {"word": "sad", "ground_truth": ["unhappy", "sorrowful", "dejected", "downcast"]}
+]
