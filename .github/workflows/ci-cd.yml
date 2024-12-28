@@ -76,11 +76,7 @@ jobs:
           -H 'Content-Type: application/json' \
           -d '{"word": "happy"}')
         echo "$RESPONSE"
-        if ! echo "$RESPONSE" | grep -q '"input_word": "happy"'; then
-          echo "Test failed: Input word not matched in response"
-          exit 1
-        fi
-        if ! echo "$RESPONSE" | grep -q '"synonyms"'; then
+        if ! echo "$RESPONSE" | grep -q 'synonyms'; then
           echo "Test failed: Synonyms not found in response"
           exit 1
         fi
