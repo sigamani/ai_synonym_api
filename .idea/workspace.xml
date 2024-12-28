@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="92a4b537-8f9f-416c-bc2c-53d7a2f1a5eb" name="Changes" comment="Fix broken ci cd" />
+    <list default="true" id="92a4b537-8f9f-416c-bc2c-53d7a2f1a5eb" name="Changes" comment="Fix broken ci cd">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" afterPath="$PROJECT_DIR$/Procfile" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -229,7 +232,7 @@
       <workItem from="1735300657167" duration="20183000" />
       <workItem from="1735324486907" duration="7233000" />
       <workItem from="1735356982267" duration="1117000" />
-      <workItem from="1735364266847" duration="323000" />
+      <workItem from="1735364266847" duration="2646000" />
     </task>
     <task id="LOCAL-00001" summary="Fixing bugs introduced">
       <option name="closed" value="true" />
@@ -568,7 +571,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ai_synonym_api$pytest_main.coverage" NAME="pytest main Coverage Results" MODIFIED="1735324875379" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/ai_synonym_api$api.coverage" NAME="api Coverage Results" MODIFIED="1735356988627" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/ai_synonym_api$api.coverage" NAME="api Coverage Results" MODIFIED="1735365322514" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/ai_synonym_api$pytest.coverage" NAME="pytest-service Coverage Results" MODIFIED="1734964371486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/tests" />
     <SUITE FILE_PATH="coverage/ai_synonym_api$main.coverage" NAME="main Coverage Results" MODIFIED="1734687914461" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/ai_synonym_api$pytest_service.coverage" NAME="pytest-service Coverage Results" MODIFIED="1735325103524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/tests" />
