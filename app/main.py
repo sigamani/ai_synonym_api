@@ -9,7 +9,7 @@ based on cosine similarity to the input word.
 from typing import List
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
-from services.synonym_service_v1 import SynonymService, EmbeddingService
+from app.synonym_service_v1 import SynonymService, EmbeddingService
 
 app = FastAPI()
 

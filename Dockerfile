@@ -16,6 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Use ARG to accept the API key during build
 ARG OPENAI_API_KEY
 ENV OPENAI_API_KEY=${OPENAI_API_KEY}
+ENV PORT=8000
 
 # Expose the application port
 EXPOSE 8000
