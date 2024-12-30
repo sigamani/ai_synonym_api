@@ -40,7 +40,7 @@ class SynonymService:
                     "role": "user",
                     "content": (
                         f"You are an expert in linguistics."
-                        f"Please provide a list of at least 10 synonyms for "
+                        f"Please provide the top ten words ranked by semantic similarity for "
                         f"the word: '{word}'. Respond only with the required "
                         f"synonyms, separated by: ###."
                     ),
