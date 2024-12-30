@@ -8,6 +8,7 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 - Provides a clean and user-friendly RESTful API.
 - Error handling for invalid inputs and API failures.
 - Asynchronous processing for high performance.
+
 ---
 
 ## Installation
@@ -68,4 +69,4 @@ pytest --disable-warnings
 
 2. Access the application at `http://127.0.0.1:8000`.
 
-3. Test deployment set-up can be seen here: [Heroku Deployment](https://ai-synonym-api-183624b326d2.herokuapp.com/))
+3. Test deployment set-up can be seen here: [Heroku Deployment](https://ai-synonym-api-183624b326d2.herokuapp.com/)
