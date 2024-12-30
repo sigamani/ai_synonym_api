@@ -9,6 +9,16 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 - Error handling for invalid inputs and API failures.
 - Asynchronous processing for high performance.
 
+## To do list if I had more time:
+- Create an evaluation dataset as a ground truth to benchmark current model and test changes.
+- Define a set of metrics to serve as an accuracy benchmark (e.g. using Thesaurus.com to find strongest matches and measure precision/recall/f1).
+- Test different embedding models (GloVe, w2v, domain specific embeddings).
+- Add disambiguation module e.g. dealing with the word bat (noun mammal), bat (noun sports), bat (verb).
+- Add in LangChain implementation to chain LLM operations.
+- Add in guardrails to prevent inappropriate responses.
+- Record performance metrics (throughput, latency).
+- Experiment with different prompting techniques to improve performance.
+- Improve API methodology (current POST request should be a GET), define multiple endpoints to return metadata, version different APIs  
 ---
 
 ## Installation
