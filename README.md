@@ -9,16 +9,25 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 - Error handling for invalid inputs and API failures.
 - Asynchronous processing for high performance.
 
-## To do list if I had more time:
-- Create an evaluation dataset as a ground truth to benchmark current model and track model performance with changes.
-- Define metrics to serve as an accuracy benchmark (e.g. using Thesaurus.com to find strongest matches and measure precision/recall/f1).
-- Experiment using different embedding models (i.e. domain specific embeddings).
-- Cache embedding vectors in a database for quicker retrieval, and reduce cost/API calls to OpenAI.
-- Add disambiguation module e.g. dealing with the word bat (noun mammal), bat (noun sports), bat (verb).
-- Add in LangChain implementation f LLM operations.
-- Add in guardrails to prevent inappropriate responses.
-- Experiment with different prompting techniques (e.g. few shot learning with examples) to reduce ambiguity.
-- Use LangSmith to track Prompting accuracy.
+## To-Do List (If More Time Was Available):
+**	1.	Create an Evaluation Dataset:**
+Develop a robust ground truth dataset to benchmark the current model’s performance and track improvements as changes are made.
+**	2.	Define Metrics for Benchmarking:
+Establish clear accuracy metrics, such as precision, recall, and F1 score. Tools like Thesaurus.com can be used to identify the strongest matches for evaluation.
+	3.	Experiment with Embedding Models:
+Test various embedding models, including domain-specific embeddings, to improve contextual understanding and relevance.
+	4.	Cache Embedding Vectors:
+Store embedding vectors in a database to enable faster retrieval and reduce API calls and associated costs (e.g., OpenAI API usage).
+	5.	Implement a Disambiguation Module:
+Add functionality to handle ambiguous terms, such as distinguishing between bat (noun: mammal), bat (noun: sports equipment), and bat (verb: action).
+	6.	Integrate LangChain for LLM Operations:
+Incorporate LangChain to streamline and enhance the model’s LLM-based operations.
+	7.	Add Guardrails for Safety:
+Introduce mechanisms to prevent inappropriate or unsafe responses.
+	8.	Refine Prompting Techniques:
+Experiment with advanced prompting methods, such as few-shot learning with clear examples, to reduce ambiguity and improve model outputs.
+	9.	Use LangSmith for Prompt Tracking:
+Leverage LangSmith to monitor and evaluate the accuracy and effectiveness of prompt designs over time.
 ---
 
 ## Installation
