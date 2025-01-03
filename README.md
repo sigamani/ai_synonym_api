@@ -9,26 +9,39 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 - Error handling for invalid inputs and API failures.
 - Asynchronous processing for high performance.
 
-## To-Do List (If More Time Was Available):
-**	1.	Create an Evaluation Dataset:**
-Develop a robust ground truth dataset to benchmark the current model’s performance and track improvements as changes are made.
-**	2.	Define Metrics for Benchmarking:
-Establish clear accuracy metrics, such as precision, recall, and F1 score. Tools like Thesaurus.com can be used to identify the strongest matches for evaluation.
-	3.	Experiment with Embedding Models:
-Test various embedding models, including domain-specific embeddings, to improve contextual understanding and relevance.
-	4.	Cache Embedding Vectors:
-Store embedding vectors in a database to enable faster retrieval and reduce API calls and associated costs (e.g., OpenAI API usage).
-	5.	Implement a Disambiguation Module:
-Add functionality to handle ambiguous terms, such as distinguishing between bat (noun: mammal), bat (noun: sports equipment), and bat (verb: action).
-	6.	Integrate LangChain for LLM Operations:
-Incorporate LangChain to streamline and enhance the model’s LLM-based operations.
-	7.	Add Guardrails for Safety:
-Introduce mechanisms to prevent inappropriate or unsafe responses.
-	8.	Refine Prompting Techniques:
-Experiment with advanced prompting methods, such as few-shot learning with clear examples, to reduce ambiguity and improve model outputs.
-	9.	Use LangSmith for Prompt Tracking:
-Leverage LangSmith to monitor and evaluate the accuracy and effectiveness of prompt designs over time.
----
+## Future Improvements and To-Do List
+
+If given more time, the following improvements and features would be implemented to enhance the project:
+
+1. **Evaluation Dataset**: 
+   - Create a robust evaluation dataset to serve as a ground truth for benchmarking the current model's performance and tracking improvements over time.
+
+2. **Define Accuracy Metrics**: 
+   - Establish clear metrics for evaluation, such as precision, recall, and F1 score.
+   - Utilize tools like [Thesaurus.com](https://www.thesaurus.com) to identify the strongest matches for comparison.
+
+3. **Embedding Experiments**: 
+   - Test different embedding models, including domain-specific embeddings, to optimise results.
+
+4. **Embedding Caching**: 
+   - Implement a caching mechanism to store embedding vectors in a database, enabling faster retrieval and reducing API costs and calls to OpenAI.
+
+5. **Disambiguation Module**: 
+   - Develop a module to handle ambiguous words (e.g., `bat` as a noun for a mammal vs. a sports implement, or as a verb).
+
+6. **LangChain Integration**: 
+   - Incorporate [LangChain](https://www.langchain.com) for efficient LLM operations and workflows.
+
+7. **Guardrails for Responses**: 
+   - Add safety measures to prevent inappropriate or unintended responses from the model.
+
+8. **Advanced Prompting Techniques**: 
+   - Experiment with different prompting strategies, such as few-shot learning with carefully curated examples, to reduce ambiguity and improve model clarity.
+
+9. **LangSmith Integration**: 
+   - Leverage [LangSmith](https://docs.langsmith.com/) to track and analyse prompting accuracy for continuous optimisation.
+
+By addressing these tasks, the project could achieve greater efficiency, accuracy, and scalability while maintaining robustness and user safety.
 
 ## Installation
 
