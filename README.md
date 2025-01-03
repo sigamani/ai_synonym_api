@@ -10,16 +10,15 @@ The AI Synonym API is a FastAPI-based application that generates a ranked list o
 - Asynchronous processing for high performance.
 
 ## To do list if I had more time:
-- Create an evaluation dataset as a ground truth to benchmark current model and test changes.
-- Define a set of metrics to serve as an accuracy benchmark (e.g. using Thesaurus.com to find strongest matches and measure precision/recall/f1).
+- Create an evaluation dataset as a ground truth to benchmark current model and track model performance with changes.
+- Define metrics to serve as an accuracy benchmark (e.g. using Thesaurus.com to find strongest matches and measure precision/recall/f1).
 - Experiment using different embedding models (i.e. domain specific embeddings).
-- Cache vectors in a database for quicker retrieval.
+- Cache embedding vectors in a database for quicker retrieval, and reduce cost/API calls to OpenAI.
 - Add disambiguation module e.g. dealing with the word bat (noun mammal), bat (noun sports), bat (verb).
-- Add in LangChain implementation to chain LLM operations.
+- Add in LangChain implementation f LLM operations.
 - Add in guardrails to prevent inappropriate responses.
-- Record performance metrics (throughput, latency).
-- Experiment with different prompting techniques to improve performance.
-- Improve API methodology (current POST request should be a GET), define multiple endpoints to return metadata, version different APIs  
+- Experiment with different prompting techniques (e.g. few shot learning with examples) to reduce ambiguity.
+- Use LangSmith to track Prompting accuracy.
 ---
 
 ## Installation
